@@ -83,7 +83,7 @@ public class GenealogyTree extends BinaryTree<String> {
 	 * Print all the ancestors line by lie, each line
 	 * being a generation (i.e. a level in the tree)
 	 */
-	public void displayGenerations()  { // facile mais pas comme on le voudrait
+	public void displayGenerations()  { // facile et fonctionne, mais le code n'est pas comme on le voudrait
 		List<String> l = new ArrayList<>();
 		int currentLevel = 0;
 		do {
