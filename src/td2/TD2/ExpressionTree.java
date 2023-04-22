@@ -1,6 +1,6 @@
 package td2.TD2;
 
-import java.util.*;
+import java.util.Scanner;
 
 /**
  * A class for arithmetic expression tree

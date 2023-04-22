@@ -1,7 +1,10 @@
-package td2.TD2;
+package td2.TD2.test;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import td2.TD2.BinaryTree;
+import td2.TD2.BinaryTreeInterface;
+import td2.TD2.Traversals;
 
 import java.util.ArrayList;
 import java.util.Arrays;

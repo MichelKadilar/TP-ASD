@@ -1,9 +1,10 @@
-package td2.TD2;
+package td2.TD2.test;
 
 import org.junit.jupiter.api.Test;
-
+import td2.TD2.BinaryTree;
 
 import java.util.function.Function;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BinaryTreeTest {
@@ -220,6 +221,8 @@ class BinaryTreeTest {
         assertTrue(balancedFunction.apply(root));
         initBN();
         assertTrue(balancedFunction.apply(root));
+        initBN2();
+        assertFalse(balancedFunction.apply(root));
     }
 
     @Test
@@ -293,5 +296,25 @@ class BinaryTreeTest {
             nodeG.setLeftBT(nodeI);
             nodeG.setRightBT(nodeJ);
             return root;
+    }
+
+    private void initBN2() {
+        root = new BinaryTree<>(1);
+
+        // Construire un arbre binaire deséquilibré avec 7 nœuds mais de profondeur 3 des deux côtés
+        BinaryTree<Integer> node2 = new BinaryTree<>(2);
+        BinaryTree<Integer> nodeThree = new BinaryTree<>(3);
+        BinaryTree<Integer> node4 = new BinaryTree<>(4);
+        BinaryTree<Integer> node5 = new BinaryTree<>(5);
+        BinaryTree<Integer> node6 = new BinaryTree<>(6);
+        BinaryTree<Integer> node7 = new BinaryTree<>(7);
+        root.setLeftBT(node2);
+        root.setRightBT(nodeThree);
+        node2.setLeftBT(node4);
+        node4.setRightBT(node5);
+        nodeThree.setLeftBT(node6);
+        nodeThree.setRightBT(leaf);
+        node6.setLeftBT(node7);
+        System.out.println(root);
     }
 }

@@ -1,6 +1,7 @@
-package td2.TD2;
+package td2.TD2.test;
 
 import org.junit.jupiter.api.Test;
+import td2.TD2.ExpressionTree;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

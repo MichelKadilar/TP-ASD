@@ -1,6 +1,6 @@
 package td2.TD2;
 
-import java.util.*;
+import java.util.Scanner;
 
 /**
  * A class for simple binary nodes
@@ -97,8 +97,20 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
 		return lowness(this);
 	}
 
-	public int lowness(BinaryTreeInterface<T> bt) {
-        return 0;
+	private int lowness(BinaryTreeInterface<T> bt) {
+		if(bt == null) return 0;
+		else {
+			if (bt.left() != null && bt.right() != null) {
+				return 1 + Math.min(bt.left().lowness(), bt.right().lowness());
+			}
+			else if(bt.left() != null){
+				return 1 + bt.left().lowness();
+			}
+			else if(bt.right() != null){
+				return 1 + bt.right().lowness();
+			}
+			else return 0; // is a leaf
+		}
 	}
 	
 	//////////////// size ////////////////
@@ -111,7 +123,19 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
 	}
 	
 	private int size(BinaryTreeInterface<T> bt) {
-		return 0;
+		if(bt != null) {
+			if(bt.left() != null && bt.right() != null) {
+				return 1 + bt.left().size() + bt.right().size();
+			}
+			else if(bt.left() != null) {
+				return 1 + bt.left().size();
+			}
+			else if(bt.right() != null){
+				return 1 + bt.right().size();
+			}
+			else return 1;
+		}
+		else return 0;
 	}
 	
 	//////////////// leaves ////////////////
@@ -124,7 +148,19 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
 	}
 	
 	private int leaves(BinaryTreeInterface<T> bt) {
-        return 0;
+		if(bt == null) return 0;
+		else {
+			if(bt.left() != null && bt.right() != null){
+				return bt.left().leaves() + bt.right().leaves();
+			}
+			else if(bt.left() != null){
+				return bt.left().leaves();
+			}
+			else if(bt.right() != null){
+				return bt.right().leaves();
+			}
+			else return 1;
+		}
 	}
 	
 	//////////////// isomorphic ////////////////
@@ -138,7 +174,14 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
 	}
 	
 	private boolean isomorphic(BinaryTreeInterface<T> bt1, BinaryTreeInterface<T> bt2) {
-        return false;
+		if(bt1 == null && bt2 == null) return true;
+		else if(bt1 == null || bt2 == null) return false; // soit l'un soit l'autre
+		else {
+			if(bt1.left() != null && bt2.left() != null && bt1.right() != null && bt2.right() != null) {
+				return bt1.left().isomorphic(bt2.left()) && bt1.right().isomorphic(bt2.right());
+			}
+			else return bt1.left() == null && bt2.right() == null;
+		}
 	}
 
 	//////////////// balanced1 ////////////////
@@ -156,7 +199,8 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
 	}
 	
 	private boolean balanced1(BinaryTreeInterface<T> bt) {
-        return false;
+		if(bt == null) return true;
+		return balanced1(bt.left()) && balanced1(bt.right()) && Math.abs(height(bt.left()) - height(bt.right())) <= 1;
 	}
 
 	//////////////// balanceValue ////////////////
@@ -166,11 +210,26 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
 	
 	@Override
 	public boolean balanced2() {
-		return false;
+		return balanced2(this);
 	}
 	
-	private int balanced2(BinaryTreeInterface<T> bt) {
-		return 0;
+	private boolean balanced2(BinaryTreeInterface<T> bt) {
+		if(bt == null) return true;
+		else {
+			if(bt.left() != null && bt.right() != null){
+				if((bt.left().isLeaf() && !bt.right().isLeaf()) || (!bt.left().isLeaf() && bt.right().isLeaf())){
+					return false;
+				}
+				else return balanced2(bt.left()) && balanced2(bt.right());
+			}
+			else if(bt.left() != null){
+				return bt.left().isLeaf();
+			}
+			else if(bt.right() != null){
+				return bt.right().isLeaf();
+			}
+			else return true;
+		}
 	}
 	
 	//////////////// shapely1 ////////////////
@@ -187,7 +246,8 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
 	}
 	
 	private boolean shapely1(BinaryTreeInterface<T> bt) {
-		return false;
+		if(bt == null) return true;
+		return shapely1(bt.left()) && shapely1(bt.right()) && bt.height() <= 2 * bt.lowness();
 	} 
 	
 	//////////////// shapely2 ////////////////
