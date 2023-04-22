@@ -207,29 +207,27 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
 	// In this version, the complexity must be O(n)
 	// where n is the size of the BN (the number of
 	// non null nodes)
-	
+
+	private static final int MAX_DIFFERENCE = 1;
+	private static final int NOT_BALANCED = -2; // or whatever value < -1
 	@Override
 	public boolean balanced2() {
-		return balanced2(this);
+		int r = balanced2(this);
+		return r != NOT_BALANCED;
 	}
-	
-	private boolean balanced2(BinaryTreeInterface<T> bt) {
-		if(bt == null) return true;
-		else {
-			if(bt.left() != null && bt.right() != null){
-				if((bt.left().isLeaf() && !bt.right().isLeaf()) || (!bt.left().isLeaf() && bt.right().isLeaf())){
-					return false;
-				}
-				else return balanced2(bt.left()) && balanced2(bt.right());
-			}
-			else if(bt.left() != null){
-				return bt.left().isLeaf();
-			}
-			else if(bt.right() != null){
-				return bt.right().isLeaf();
-			}
-			else return true;
-		}
+
+	private int balanced2(BinaryTreeInterface<T> bt) {
+		if ( bt == null )
+			return -1;
+		int l = balanced2(bt.left());
+		if ( l == NOT_BALANCED )
+			return NOT_BALANCED;
+		int r = balanced2(bt.right());
+		if ( r == NOT_BALANCED )
+			return NOT_BALANCED;
+		if ( Math.abs(l-r) > MAX_DIFFERENCE )
+			return NOT_BALANCED;
+		return 1 + Math.max(l, r);
 	}
 	
 	//////////////// shapely1 ////////////////
@@ -262,10 +260,41 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
 	}
 	
 	public boolean shapely2() {
-		return false;
+		Pair p = shapely2(this);
+		return p != null;
 	}
 	
 	private Pair shapely2(BinaryTreeInterface<T> bt) {
+		if ( bt.left() == null && bt.right() == null )
+			return new Pair();
+		int lowness;
+		int height;
+		if ( bt.right() == null ) {
+			Pair l = shapely2(bt.left());
+			if ( l == null )
+				return null;
+			lowness = 1 + l.lowness;
+			height = 1 + l.height;
+		}
+		else if ( bt.left() == null ) {
+			Pair r = shapely2(bt.right());
+			if ( r == null )
+				return null;
+			lowness = 1 + r.lowness;
+			height = 1 + r.height;
+		}
+		else {
+			Pair l = shapely2(bt.left());
+			if ( l == null )
+				return null;
+			Pair r = shapely2(bt.right());
+			if ( r == null )
+				return null;
+			height = 1 + Math.max(l.height, r.height);
+			lowness = 1 + Math.min(l.lowness, r.lowness);
+		}
+		if ( height <= 2*lowness )
+			return new Pair(height,lowness);
 		return null;
 	}
 
