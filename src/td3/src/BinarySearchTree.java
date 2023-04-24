@@ -293,14 +293,25 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Iterab
      * @param list a sorted (increasing) list of elements
      */
     public BinarySearchTree(List<T> list) {
-        makeTree(list, 0, list.size() - 1);
+        BinarySearchTree<T> b = makeTree(list, 0, list.size() - 1);
+        if(b != null) {
+            this.data = b.data;
+            this.LT = b.LT;
+            this.RT = b.RT;
+        }
     }
 
     //Usefull method to build a binary search tree  from a sorted list
     //The list is divided in two parts, the first part is used to build
     //the left subtree, the second part is used to build the right subtree
     private BinarySearchTree<T> makeTree(List<T> list, int i, int j) {
-        return null;
+        if (i > j)
+            return null;
+        int m = (i + j) / 2;
+        BinarySearchTree<T> t = new BinarySearchTree<>(list.get(m));
+        t.LT = makeTree(list, i, m - 1);
+        t.RT = makeTree(list, m + 1, j);
+        return t;
     }
 
 
@@ -333,24 +344,36 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Iterab
          */
         BSTiterator(BinarySearchTree<T> n) {
             stack = new ArrayDeque<>();
-            // push all the left nodes on the stack
-            //TODO
+            while (n != null && !n.isEmpty()) {
+                stack.push(n);
+                n = n.LT;
+            }
         }
 
         /**
          * Check if there are more elements in the
-         * iterator
+         * tree
          */
         public boolean hasNext() {
-            return false;
+            return !stack.isEmpty();
         }
 
         /**
-         * Return and remove the next element from
-         * the iterator
+         * Return and remove the next element
          */
         public T next() {
-            return null;
+            try {
+                BinarySearchTree<T> bst = stack.pop();
+                T value = bst.data;
+                bst = bst.RT;
+                while (bst != null) {
+                    stack.push(bst);
+                    bst = bst.LT;
+                }
+                return value;
+            } catch (EmptyStackException e) {
+                throw new NoSuchElementException(e);
+            }
         }
 
         /**
